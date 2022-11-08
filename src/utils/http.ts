@@ -1,6 +1,6 @@
 import axios  from 'axios'
-import { code, message } from '@/types/http'
-import { Alert } from 'antd';
+import { code, param } from '@/types/http'
+import { message } from 'antd';
 
 const http = axios.create({
   baseURL: 'http://127.0.0.1:5173',
@@ -25,7 +25,7 @@ http.interceptors.response.use((response) => {
   } else {
     alert({data, msg})
   }
-  return data
+  // return data
 }, (error) => {
   return Promise.reject(error)
 })
@@ -50,9 +50,9 @@ const verify = (code: code) => {
 }
 
 // 提示
-const alert = (param: message) => {
+const alert = async (param: param) => {
   const { msg, data } = param
-  Alert(data || msg)
+  await message.error(data || msg)
 }
 
 export default http

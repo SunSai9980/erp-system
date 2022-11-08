@@ -1,12 +1,20 @@
 import { MockMethod } from 'vite-plugin-mock'
 
 interface userInfo {
-  userName: string,
-  passWord: string
+  username: string,
+  password: string
 }
+
+interface data {
+  body: userInfo,
+  headers: {},
+  query: {},
+  url: string
+}
+
 const root = {
-  userName: '袁子涵',
-  passWord: 'sy923621'
+  username: '袁子涵',
+  password: 'sy923621'
 }
 
 let mock: MockMethod[] = [
@@ -14,13 +22,12 @@ let mock: MockMethod[] = [
     url: '/api/login',
     method: 'post',
     timeout: 2000,
-    response(data: userInfo) {
-      console.log(data)
-      if (data.userName === root.userName) {
-        return {data:{code: 1, data: '用户名错误'}}
+    response: ({body}: data) =>  {
+      if (body.username !== root.username) {
+        return {data:{code: 2, data: '用户名错误'}}
       }
-      if (data.passWord === root.passWord) {
-        return {data:{code: 1, data: '密码错误'}}
+      if (body.password !== root.password) {
+        return {data:{code: 2, data: '密码错误'}}
       }
       return {data:{code: 0, msg: '登录成功'}}
     }

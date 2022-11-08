@@ -1,15 +1,21 @@
 import { Button, Checkbox, Form, Input } from 'antd';
 import React from 'react';
+import { useNavigate } from 'react-router-dom'
 import { getLogin } from '@api/login'
+import './style.scss'
 
 const Login:React.FC = () => {
+  const navigate = useNavigate()
   const onFinish = async (values: any) => {
-    console.log('Success:', values);
+    console.log('Success:', values)
     const result = await getLogin({
-      passWord: values.password,
-      userName: values.username
+      password: values.password,
+      username: values.username
     })
-    console.log(result)
+    if (result) {
+      navigate('/')
+      sessionStorage.setItem('username', values.username)
+    }
   }
 
   const onFinishFailed = (errorInfo: any) => {
@@ -17,41 +23,40 @@ const Login:React.FC = () => {
   }
 
   return (
-    <Form
-      name="basic"
-      labelCol={{ span: 8 }}
-      wrapperCol={{ span: 16 }}
-      initialValues={{ remember: true }}
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
-      autoComplete="off"
-    >
-      <Form.Item
-        label="Username"
-        name="username"
-        rules={[{ required: true, message: 'Please input your username!' }]}
+    <div className="login login-bg">
+      <Form
+        className="login__form"
+        name="basic"
+        labelCol={{ span: 8 }}
+        wrapperCol={{ span: 16 }}
+        initialValues={{ remember: true }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        autoComplete="off"
       >
-        <Input />
-      </Form.Item>
+        <Form.Item
+          label="用户名"
+          name="username"
+          rules={[{ required: true, message: '请输入用户名!' }]}
+        >
+          <Input />
+        </Form.Item>
 
-      <Form.Item
-        label="Password"
-        name="password"
-        rules={[{ required: true, message: 'Please input your password!' }]}
-      >
-        <Input.Password />
-      </Form.Item>
+        <Form.Item
+          label="密码"
+          name="password"
+          rules={[{ required: true, message: '请输入密码!' }]}
+        >
+          <Input.Password />
+        </Form.Item>
 
-      <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
-        <Checkbox>Remember me</Checkbox>
-      </Form.Item>
-
-      <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>
+        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+          <Button type="primary" htmlType="submit">
+            登录
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
   )
 }
 

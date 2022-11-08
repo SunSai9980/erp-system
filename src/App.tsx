@@ -1,11 +1,9 @@
-import Login from './views/login'
+import GetRouter from '@router/index'
 
 function App() {
 
   return (
-    <>
-      <Login/>
-    </>
+      <GetRouter/>
   )
 }
 
